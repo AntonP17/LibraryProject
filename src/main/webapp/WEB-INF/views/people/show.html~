@@ -1,10 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Человек</title>
 </head>
 <body>
-$END$
+
+<p th:text="${person.getFirstName()}">VALUE</p>
+<p th:text="${person.getPatronymic()}">VALUE </p>
+<p th:text="${person.getLastName()}">VALUE</p>
+
+<!-- Список книг -->
+<h3>Список книг:</h3>
+<div th:if="${not #lists.isEmpty(books)}"> <!-- Проверка, есть ли книги -->
+    <ul>
+        <li th:each="book : ${books}" th:text="${book.title}"></li> <!-- Вывод каждой книги -->
+    </ul>
+</div>
+<div th:unless="${not #lists.isEmpty(books)}"> <!-- Если книг нет -->
+    <p>Книг нет</p>
+</div>
+
+<br/>
+<hr/>
+<!-- вот тут кнопка для редактирования , происходит переход на страницу для редактирования конкретнго человека-->
+<a th:href="@{/people/{id}/edit(id=${person.getId()})}">Edit</a>
+
+<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}"> <!-- происходит переход на страницу удаления конкретнго человека по id-->
+    <input type="submit" value="Delete!"/> <!-- при нажатии этой кнопки происходит перехд по адресу выше и все -->
+
+</form>
 </body>
 </html>

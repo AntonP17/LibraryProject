@@ -2,7 +2,9 @@ package org.example.controllers;
 
 
 import jakarta.validation.Valid;
+import org.example.dao.BookDAO;
 import org.example.dao.PersonDAO;
+import org.example.model.Book;
 import org.example.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,10 +20,12 @@ import java.util.List;
 public class PeopleController {
 
     private final PersonDAO personDAO;
+    private final BookDAO bookDAO;
 
     @Autowired
-    public PeopleController(PersonDAO personDAO) {
+    public PeopleController(PersonDAO personDAO, BookDAO bookDAO) {
         this.personDAO = personDAO;
+        this.bookDAO = bookDAO;
     }
 
     // отображаем всех
@@ -34,7 +38,13 @@ public class PeopleController {
     // отображаем одного
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("person", personDAO.show(id));
+
+        Person person = personDAO.show(id);
+        List<Book> books = bookDAO.getBooksByPersonId(id);
+
+        model.addAttribute("person", person);
+        model.addAttribute("books", books);
+
         return "people/show";
     }
 
