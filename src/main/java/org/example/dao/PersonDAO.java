@@ -36,13 +36,13 @@ public class PersonDAO {
 
     // сохраняем
     public void save(Person person) {
-        jdbcTemplate.update("INSERT INTO Person (firstname, lastname, patronymic, dayOfBirth) VALUES (?, ?, ?, ?)",
+        jdbcTemplate.update("INSERT INTO person (firstname, lastname, patronymic, \"dayOfBirth\") VALUES (?, ?, ?, ?)",
                 person.getFirstName(), person.getLastName(), person.getPatronymic(), person.getDayOfBirth());
     }
 
     // обновляем
     public void update(int id, Person updatedPerson) {
-        jdbcTemplate.update("UPDATE Person SET firstname=?, lastname=?, patronymic=?, dayOfBirth=? WHERE id=?",
+        jdbcTemplate.update("UPDATE Person SET firstname=?, lastname=?, patronymic=?,\"dayOfBirth\"=? WHERE id=?",
                 updatedPerson.getFirstName(), updatedPerson.getLastName(),
                 updatedPerson.getPatronymic(), updatedPerson.getDayOfBirth(), id);
     }

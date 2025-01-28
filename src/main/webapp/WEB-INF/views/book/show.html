@@ -1,10 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Книга</title>
 </head>
 <body>
 
+<p th:text="${book.title}">VALUE</p>
+<p th:text="${book.author}">VALUE </p>
+<p th:text="${book.year}">VALUE</p>
+
+<!-- Отображение владельца, если есть -->
+<div th:if="${owner != null}">
+    <h3>Сейчас у:</h3>
+    <p th:text="${owner.firstName} + ' ' + ${owner.lastName} + ' ' + ${owner.patronymic}"></p>
+</div>
+<div th:unless="${owner != null}">
+    <p>Книга сейчас свободна.</p>
+</div>
+
+<!-- Форма для освобождения -->
+<form th:method="POST" th:action="@{/books/{id}/release(id=${book.id})}">
+    <button type="submit">Освободить книгу</button>
+</form>
+<p></p>
+<!-- вот тут кнопка для редактирования , происходит переход на страницу для редактирования конкретной книги-->
+<a th:href="@{/books/{id}/edit(id=${book.id})}">Edit</a>
+
+<form th:method="DELETE" th:action="@{/books/{id}(id=${book.id})}"> <!-- происходит переход на страницу удаления конкретной книги по id-->
+    <input type="submit" value="Delete!"/>
+</form>
 </body>
 </html>

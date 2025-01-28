@@ -24,6 +24,14 @@ public class BookDAO {
         return jdbcTemplate.query("SELECT * FROM Book", new BeanPropertyRowMapper<>(Book.class));
     }
 
+    // получение книг, взятых person
+    public List<Book> getBooksByPersonId(int personId) {
+        return jdbcTemplate.query("SELECT * FROM Book WHERE person_id=?", new Object[]{personId}, new BeanPropertyRowMapper<>(Book.class));
+    }
+
+    // получение данных у кого книга
+    public 
+
     // получение конкретной книги
     public Book show(int id) {
         return jdbcTemplate.query("SELECT * FROM Book WHERE id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Book.class))
@@ -33,6 +41,11 @@ public class BookDAO {
     // сохранение
     public void save(Book book) {
         jdbcTemplate.update("INSERT INTO Book (title, author, year) VALUES(?, ?, ?)", book.getTitle(), book.getAuthor(), book.getYear());
+    }
+
+    // освобождение книги
+    public void release(int id) {
+        jdbcTemplate.update("UPDATE Book SET person_id=NULL WHERE id=?", id);
     }
 
     // обновление
