@@ -19,36 +19,40 @@ public class BookDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // получение всех книг
+    //+ получение всех книг
     public List<Book> index() {
-        return jdbcTemplate.query("SELECT * FROM Book", new BeanPropertyRowMapper<>(Book.class));
+        return jdbcTemplate.query("SELECT * FROM Book", new BeanPropertyRowMapper<Book>(Book.class));
     }
 
-    // получение книг, взятых person
+    //+ получение книг, взятых person
     public List<Book> getBooksByPersonId(int personId) {
         return jdbcTemplate.query("SELECT * FROM Book WHERE person_id=?", new Object[]{personId}, new BeanPropertyRowMapper<>(Book.class));
     }
 
-    // получение данных у кого книга
+    //+ получение данных у кого книга
     public Person getOwnerByBookId(int bookId) {
-        String sql = "SELECT person.id, person.firstname, person.lastname, person.patronymic " +
+        String sql = "SELECT person.firstname, person.lastname, person.patronymic " +
                 "FROM person " +
                 "JOIN book " +
                 "ON person.id = book.person_id " +
                 "WHERE book.id = ?";
 
-        List<Person> persons = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Person.class), bookId);
+        List<Person> persons = jdbcTemplate.query(sql, new BeanPropertyRowMapper<Person>(Person.class), bookId);
 
-        return persons.get(0);
+        if (persons.isEmpty()) {
+            return null; // Возвращаем null, если нет владельца
+        } else {
+            return persons.get(0); // Возвращаем владельца, если он есть
+        }
     }
 
-    // получение конкретной книги
+    //+ получение конкретной книги
     public Book show(int id) {
         return jdbcTemplate.query("SELECT * FROM Book WHERE id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Book.class))
                 .stream().findAny().orElse(null);
     }
 
-    // сохранение
+    //- сохранение
     public void save(Book book) {
         jdbcTemplate.update("INSERT INTO Book (title, author, year) VALUES(?, ?, ?)", book.getTitle(), book.getAuthor(), book.getYear());
     }
@@ -58,7 +62,12 @@ public class BookDAO {
         jdbcTemplate.update("UPDATE Book SET person_id=NULL WHERE id=?", id);
     }
 
-    // обновление
+    // назначение книги
+    public void assign(int bookId, int personId) {
+        jdbcTemplate.update("UPDATE Book SET person_id = ? WHERE id = ?", personId, bookId);
+    }
+
+    //- обновление
     public void update(int id, Book updatedBook) {
         jdbcTemplate.update("UPDATE Book SET tittle=?, author=?, year=? WHERE id=?",
                 updatedBook.getTitle(), updatedBook.getAuthor(), updatedBook.getYear(), id);

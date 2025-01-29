@@ -2,6 +2,7 @@ package org.example.controllers;
 
 import jakarta.validation.Valid;
 import org.example.dao.BookDAO;
+import org.example.dao.PersonDAO;
 import org.example.model.Book;
 import org.example.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,34 +11,39 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 @Controller
 @RequestMapping("/books")
 public class BookController {
 
     private final BookDAO bookDAO;
+    private final PersonDAO personDAO;
 
     @Autowired
-    public BookController(BookDAO bookDAO) {
+    public BookController(BookDAO bookDAO, PersonDAO personDAO) {
         this.bookDAO = bookDAO;
+        this.personDAO = personDAO;
     }
 
-    // отображение всех
+    //+ отображение всех
     @GetMapping()
     public String index(Model model) {
         model.addAttribute("book", bookDAO.index());
         return "book/index";
     }
 
-    // отображение конкретной
+    //+ отображение конкретной
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
 
         Book book = bookDAO.show(id);
         Person owner = bookDAO.getOwnerByBookId(id);
+        List<Person> people = personDAO.index();
 
         model.addAttribute("book", book);
         model.addAttribute("owner", owner);
+        model.addAttribute("people", people);
         return "book/show";
 
     }
@@ -46,6 +52,13 @@ public class BookController {
     @PatchMapping("/{id}/release")
     public String release(@PathVariable("id") int id) {
         bookDAO.release(id);
+        return "redirect:/books";
+    }
+
+    // назначение книги
+    @PatchMapping("/{id}/assign")
+    public String assign(@PathVariable("id") int id, @RequestParam("person_id") int personId) {
+        bookDAO.assign(id, personId);
         return "redirect:/books";
     }
 
@@ -79,7 +92,7 @@ public class BookController {
             return "book/edit";
 
         bookDAO.update(id, book);
-        return "redirect:/people";
+        return "redirect:/books";
     }
 
     // удаление
