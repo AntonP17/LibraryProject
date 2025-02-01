@@ -17,7 +17,7 @@ public class Book {
     @Size(min = 2, max = 100, message = "Author name should be between 2 and 100 characters")
     private String author;
 
-    @NotEmpty (message = "Year should not be empty")
+
     @Min(value = 0, message = "Year should be greater than 0")
     private int year;
 

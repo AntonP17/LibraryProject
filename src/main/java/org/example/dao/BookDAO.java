@@ -69,7 +69,7 @@ public class BookDAO {
 
     //- обновление
     public void update(int id, Book updatedBook) {
-        jdbcTemplate.update("UPDATE Book SET tittle=?, author=?, year=? WHERE id=?",
+        jdbcTemplate.update("UPDATE Book SET title=?, author=?, year=? WHERE id=?",
                 updatedBook.getTitle(), updatedBook.getAuthor(), updatedBook.getYear(), id);
     }
 

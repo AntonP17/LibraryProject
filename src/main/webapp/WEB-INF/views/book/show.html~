@@ -6,14 +6,12 @@
 </head>
 <body>
 
-<p th:text="${book.title}">VALUE</p>
-<p th:text="${book.author}">VALUE </p>
-<p th:text="${book.year}">VALUE</p>
+<p th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">VALUE</p>
 
 <!-- Отображение владельца, если есть -->
 <div th:if="${owner != null}">
     <h3>Сейчас у:</h3>
-    <p th:text="${owner.firstName} + ' ' + ${owner.lastName} + ' ' + ${owner.patronymic}"></p>
+    <p th:text="${owner.lastName} + ' ' + ${owner.firstName} + ' ' + ${owner.patronymic}"></p>
 
     <!-- Форма для освобождения -->
     <form th:method="PATCH" th:action="@{/books/{id}/release(id=${book.id})}">
@@ -22,14 +20,12 @@
     </form>
 </div>
 
-
-
 <div th:unless="${owner != null}">
-    <p>Книга сейчас свободна.</p>
+    <p>Книга сейчас свободна. Кому назначить ее?</p>
     <!-- Форма для назначения -->
     <form th:method="PATCH" th:action="@{/books/{id}/assign(id=${book.id})}">
         <input type="hidden" name="_method" value="patch" />
-        <select name="person_id">
+     Выберите человека   <select name="person_id">
             <option th:each="person : ${people}"
                     th:value="${person.id}"
                     th:text="${person.firstName} + ' ' + ${person.lastName}">
@@ -39,7 +35,8 @@
     </form>
 </div>
 
-<p></p>
+<br/>
+<hr/>
 <!-- вот тут кнопка для редактирования , происходит переход на страницу для редактирования конкретной книги-->
 <a th:href="@{/books/{id}/edit(id=${book.id})}">Edit</a>
 

@@ -32,13 +32,21 @@
     <br/>
 
     <!-- Поле для даты рождения -->
-    <label for="dayOfBirth">Дата рождения:</label>
-    <input type="date" th:field="*{dayOfBirth}" id="dayOfBirth"/>
+    <label for="dayOfBirth">год рождения</label>
+    <input type="text" th:field="*{dayOfBirth}" id="dayOfBirth"/>
     <div style="color:red" th:if="${#fields.hasErrors('dayOfBirth')}" th:errors="*{dayOfBirth}">Ошибка в дате рождения</div>
     <br/>
 
     <!-- Кнопка отправки формы -->
-    <input type="submit" value="Обновить"/>
+    <input type="submit" value="Обновить" style="
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    "/>
 </form>
 
 </body>

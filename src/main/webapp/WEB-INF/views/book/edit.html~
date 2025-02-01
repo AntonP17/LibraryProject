@@ -27,8 +27,8 @@
 
     <!-- Поле для года издания -->
     <label for="publicationYear">Год издания:</label>
-    <input type="number" th:field="*{publicationYear}" id="publicationYear" placeholder="Введите год издания"/>
-    <div style="color:red" th:if="${#fields.hasErrors('publicationYear')}" th:errors="*{publicationYear}">Ошибка в годе издания</div>
+    <input type="number" th:field="*{year}" id="publicationYear" placeholder="Введите год издания"/>
+    <div style="color:red" th:if="${#fields.hasErrors('publicationYear')}" th:errors="*{year}">Ошибка в годе издания</div>
     <br/>
 
     <!-- Кнопка отправки формы -->
